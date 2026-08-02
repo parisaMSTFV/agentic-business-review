@@ -1,0 +1,38 @@
+{
+  "sessions": {
+    "label": "Sessions",
+    "direction": "higher",
+    "format": "integer",
+    "target_tolerance": 0.02
+  },
+  "orders": {
+    "label": "Orders",
+    "direction": "higher",
+    "format": "integer",
+    "target_tolerance": 0.02
+  },
+  "conversion_rate": {
+    "label": "Conversion rate",
+    "direction": "higher",
+    "format": "percent",
+    "target_tolerance": 0.02
+  },
+  "aov": {
+    "label": "Average order value",
+    "direction": "higher",
+    "format": "currency",
+    "target_tolerance": 0.02
+  },
+  "nmv": {
+    "label": "Net merchandise value",
+    "direction": "higher",
+    "format": "currency",
+    "target_tolerance": 0.02
+  },
+  "service_failure_rate": {
+    "label": "Service failure rate",
+    "direction": "lower",
+    "format": "percent",
+    "target_tolerance": 0.03
+  }
+}
