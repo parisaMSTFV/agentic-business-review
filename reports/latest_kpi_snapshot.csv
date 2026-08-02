@@ -1,0 +1,7 @@
+metric,label,direction,value,previous_value,target,wow_change,business_change,target_gap,status,current_evidence_id,previous_evidence_id,target_evidence_id
+sessions,Sessions,higher,1173895.0,1154594.0,1161637.0,0.016716698683693076,0.016716698683693076,0.010552349830454721,on_track,SYN-W064:sessions,SYN-W063:sessions,SYN-W064:target_sessions
+orders,Orders,higher,43052.0,43670.0,43219.0,-0.014151591481566306,-0.014151591481566306,-0.00386404127814155,on_track,SYN-W064:orders,SYN-W063:orders,SYN-W064:target_orders
+conversion_rate,Conversion rate,higher,0.036674489626414626,0.037822819103511714,0.037205,-0.030360758513382935,-0.030360758513382935,-0.014259115000278877,on_track,SYN-W064:conversion_rate,SYN-W063:conversion_rate,SYN-W064:target_conversion_rate
+aov,Average order value,higher,1341136.0,1364066.0,1343548.0,-0.016810037050993154,-0.016810037050993154,-0.001795246615677315,on_track,SYN-W064:aov,SYN-W063:aov,SYN-W064:target_aov
+nmv,Net merchandise value,higher,57738587072.0,59568762220.0,58066801012.0,-0.03072373975542375,-0.03072373975542375,-0.005652350986791399,on_track,SYN-W064:nmv,SYN-W063:nmv,SYN-W064:target_nmv
+service_failure_rate,Service failure rate,lower,0.024914953258973725,0.024409399402591545,0.02444,0.020711441852539147,-0.020711441852539147,0.01943343940154363,on_track,SYN-W064:service_failure_rate,SYN-W063:service_failure_rate,SYN-W064:target_service_failure_rate

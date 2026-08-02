@@ -1,0 +1,39 @@
+{
+  "artifact_fingerprint": "50a7efa058f05614",
+  "data": {
+    "checks_passed": 10,
+    "columns": 18,
+    "end_week": "2025-03-17",
+    "rows": 64,
+    "start_week": "2024-01-01",
+    "synthetic_anomalies": 7
+  },
+  "driver_reconciliation_max_abs_error": 2.0816681711721685e-16,
+  "evaluation_boundary": "Labeled synthetic data only",
+  "fixed_rule_baseline": {
+    "f1": 0.8333333333333333,
+    "false_alert_rate": 0.0,
+    "false_negatives": 2,
+    "false_positives": 0,
+    "precision": 1.0,
+    "recall": 0.7142857142857143,
+    "true_negatives": 201,
+    "true_positives": 5
+  },
+  "rolling_detector": {
+    "f1": 0.8750000000000001,
+    "false_alert_rate": 0.009950248756218905,
+    "false_negatives": 0,
+    "false_positives": 2,
+    "precision": 0.7777777777777778,
+    "recall": 1.0,
+    "true_negatives": 199,
+    "true_positives": 7
+  },
+  "traceability": {
+    "claim_count": 12,
+    "coverage": 1.0,
+    "missing": [],
+    "traceable_claims": 12
+  }
+}

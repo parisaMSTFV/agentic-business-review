@@ -1,0 +1,13 @@
+claim_id,claim_type,metric,value,reference_value,change,status,evidence_ids,review_status
+CLAIM-KPI-SESSIONS,latest_kpi_status,sessions,1173895.0,1161637.0,0.010552349830454721,on_track,SYN-W064:sessions|SYN-W064:target_sessions,pending_human_review
+CLAIM-KPI-ORDERS,latest_kpi_status,orders,43052.0,43219.0,-0.00386404127814155,on_track,SYN-W064:orders|SYN-W064:target_orders,pending_human_review
+CLAIM-KPI-CONVERSION_RATE,latest_kpi_status,conversion_rate,0.036674489626414626,0.037205,-0.014259115000278877,on_track,SYN-W064:conversion_rate|SYN-W064:target_conversion_rate,pending_human_review
+CLAIM-KPI-AOV,latest_kpi_status,aov,1341136.0,1343548.0,-0.001795246615677315,on_track,SYN-W064:aov|SYN-W064:target_aov,pending_human_review
+CLAIM-KPI-NMV,latest_kpi_status,nmv,57738587072.0,58066801012.0,-0.005652350986791399,on_track,SYN-W064:nmv|SYN-W064:target_nmv,pending_human_review
+CLAIM-KPI-SERVICE_FAILURE_RATE,latest_kpi_status,service_failure_rate,0.024914953258973725,0.02444,0.01943343940154363,on_track,SYN-W064:service_failure_rate|SYN-W064:target_service_failure_rate,pending_human_review
+CLAIM-ALERT-01,statistical_alert,sessions,1385109.0,1210437.0,0.1443049080621297,requires_review,SYN-W057:sessions,pending_human_review
+CLAIM-ALERT-02,statistical_alert,conversion_rate,0.04176921368086495,0.037135,0.12479369007311014,requires_review,SYN-W062:conversion_rate,pending_human_review
+CLAIM-ALERT-03,statistical_alert,service_failure_rate,0.03292395373178908,0.02492,0.3211859442933016,requires_review,SYN-W060:service_failure_rate,pending_human_review
+CLAIM-DRIVER-01,nmv_driver_contribution,sessions,1173895.0,1154594.0,0.01657851256037465,descriptive_not_causal,SYN-W063:sessions|SYN-W064:sessions,pending_human_review
+CLAIM-DRIVER-02,nmv_driver_contribution,conversion_rate,0.036674489626414626,0.037822819103511714,-0.030831192655792598,descriptive_not_causal,SYN-W063:conversion_rate|SYN-W064:conversion_rate,pending_human_review
+CLAIM-DRIVER-03,nmv_driver_contribution,aov,1341136.0,1364066.0,-0.016952929337131956,descriptive_not_causal,SYN-W063:aov|SYN-W064:aov,pending_human_review
