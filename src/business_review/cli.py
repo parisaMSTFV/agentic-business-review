@@ -8,7 +8,7 @@ import tempfile
 from pathlib import Path
 
 from business_review.config import PROJECT_ROOT
-from business_review.pipeline import run_pipeline
+from business_review.review import apply_review_decisions
 
 
 def main() -> None:
@@ -18,12 +18,29 @@ def main() -> None:
     reproduce.add_argument("--output-root", type=Path, default=PROJECT_ROOT)
     reproduce.add_argument("--seed", type=int, default=42)
     reproduce.add_argument("--periods", type=int, default=64)
+    supplied = subparsers.add_parser("run", help="review a supplied weekly KPI CSV")
+    supplied.add_argument("--input-weekly-kpis", type=Path, required=True)
+    supplied.add_argument("--output-root", type=Path, required=True)
+    decisions = subparsers.add_parser(
+        "apply-decisions", help="apply validated human decisions to a claim queue"
+    )
+    decisions.add_argument("--claims", type=Path, required=True)
+    decisions.add_argument("--decisions", type=Path, required=True)
+    decisions.add_argument("--output", type=Path, required=True)
     subparsers.add_parser("smoke", help="run the complete pipeline in a temporary directory")
     args = parser.parse_args()
+
+    if args.command == "apply-decisions":
+        summary = apply_review_decisions(args.claims, args.decisions, args.output)
+        print(json.dumps(summary, indent=2, sort_keys=True))
+        return
+    from business_review.pipeline import run_pipeline
 
     if args.command == "smoke":
         with tempfile.TemporaryDirectory(prefix="business-review-") as directory:
             metrics = run_pipeline(Path(directory))
+    elif args.command == "run":
+        metrics = run_pipeline(args.output_root, input_path=args.input_weekly_kpis)
     else:
         metrics = run_pipeline(args.output_root, seed=args.seed, periods=args.periods)
     print(json.dumps(metrics, indent=2, sort_keys=True))

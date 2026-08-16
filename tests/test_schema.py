@@ -1,8 +1,10 @@
+from pathlib import Path
+
 import pandas as pd
 import pytest
 
 from business_review.config import load_metric_catalog
-from business_review.schema import DataValidationError, validate_weekly_kpis
+from business_review.schema import DataValidationError, load_weekly_kpis, validate_weekly_kpis
 from business_review.synthetic import generate_weekly_kpis
 
 
@@ -35,3 +37,23 @@ def test_schema_rejects_duplicate_source_ids() -> None:
 
 def test_week_start_is_datetime_in_generated_data() -> None:
     assert pd.api.types.is_datetime64_any_dtype(generate_weekly_kpis()["week_start"])
+
+
+def test_supplied_input_loads_without_synthetic_evaluation_labels() -> None:
+    path = Path(__file__).parents[1] / "examples" / "weekly_kpis.csv"
+    frame, provenance = load_weekly_kpis(path, load_metric_catalog())
+    assert len(frame) == 16
+    assert not any(column.startswith("injected_") for column in frame)
+    assert provenance["contract_version"] == "weekly-kpi-v1.0"
+    assert len(str(provenance["sha256"])) == 64
+
+
+def test_supplied_input_rejects_nonweekly_cadence(tmp_path: Path) -> None:
+    frame = generate_weekly_kpis().drop(
+        columns=[column for column in generate_weekly_kpis() if column.startswith("injected_")]
+    )
+    frame.loc[3, "week_start"] = frame.loc[3, "week_start"] + pd.Timedelta(days=1)
+    path = tmp_path / "invalid.csv"
+    frame.to_csv(path, index=False)
+    with pytest.raises(DataValidationError, match="seven-day cadence"):
+        load_weekly_kpis(path, load_metric_catalog())

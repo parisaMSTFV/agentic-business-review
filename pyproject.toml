@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "agentic-business-review"
 version = "1.0.0"
-description = "A traceable, human-in-the-loop weekly KPI review workflow using synthetic data."
+description = "Governed weekly KPI review with evidence lineage and explicit human decisions."
 readme = "README.md"
 requires-python = ">=3.11"
 license = { file = "LICENSE" }

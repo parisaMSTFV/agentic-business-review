@@ -23,7 +23,7 @@ jobs:
       - name: Install
         run: python -m pip install -e ".[dev]"
       - name: Lint
-        run: python -m ruff check .
+        run: python -m ruff check . && python -m ruff format --check .
       - name: Test
         env:
           MPLCONFIGDIR: /tmp/matplotlib
@@ -34,3 +34,9 @@ jobs:
         env:
           MPLCONFIGDIR: /tmp/matplotlib
         run: python -m business_review.cli smoke
+      - name: Supplied-input and approval smoke test
+        env:
+          MPLCONFIGDIR: /tmp/matplotlib
+        run: |
+          python -m business_review.cli run --input-weekly-kpis examples/weekly_kpis.csv --output-root /tmp/business-review-input
+          python -m business_review.cli apply-decisions --claims /tmp/business-review-input/reports/claims.csv --decisions examples/review_decisions.csv --output /tmp/business-review-input/reports/reviewed_claims.csv

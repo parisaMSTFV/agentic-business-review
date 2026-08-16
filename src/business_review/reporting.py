@@ -54,16 +54,18 @@ def plot_kpi_trends(
             linestyle="--",
             label="Target",
         )
-        injected = recent[recent[f"injected_{metric}"] == 1]
-        axis.scatter(
-            injected["week_start"],
-            injected[metric],
-            color=COLORS["red"],
-            marker="D",
-            s=34,
-            label="Injected anomaly",
-            zorder=3,
-        )
+        anomaly_column = f"injected_{metric}"
+        if anomaly_column in recent:
+            injected = recent[recent[anomaly_column] == 1]
+            axis.scatter(
+                injected["week_start"],
+                injected[metric],
+                color=COLORS["red"],
+                marker="D",
+                s=34,
+                label="Injected anomaly",
+                zorder=3,
+            )
         axis.set_title(spec.label, loc="left", color=COLORS["navy"], weight="bold")
         axis.grid(alpha=0.18)
         axis.spines[["top", "right"]].set_visible(False)
@@ -156,6 +158,7 @@ def render_dashboard(
     alerts: pd.DataFrame,
     catalog: dict[str, MetricSpec],
     output_path: Path,
+    data_mode: str = "synthetic_evaluation",
 ) -> None:
     """Render a deterministic, escaped HTML review artifact."""
     cards: list[str] = []
@@ -196,12 +199,22 @@ def render_dashboard(
         for row in recent_alerts.itertuples(index=False)
     )
 
+    title = (
+        "Synthetic Weekly Business Review"
+        if data_mode == "synthetic_evaluation"
+        else "Weekly Business Review"
+    )
+    data_notice = (
+        "Labeled synthetic evaluation data"
+        if data_mode == "synthetic_evaluation"
+        else "Supplied KPI input · alert accuracy not evaluated"
+    )
     content = f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Synthetic Weekly Business Review</title>
+<title>{title}</title>
 <style>
 :root {{ --navy:#17324D; --blue:#3C78A8; --teal:#4A9D8F; --red:#C85C5C;
 --green:#4D8B65; --amber:#D69E3D; --ink:#24313F; --muted:#667085; --ivory:#F7F3EA; }}
@@ -222,12 +235,12 @@ th {{ background:#F1EEE6; color:var(--navy); }} code {{ color:#315F7A; }} footer
 </style>
 </head>
 <body><main>
-<header><h1>Synthetic Weekly Business Review</h1><p>Deterministic KPI checks, labeled alerts, driver decomposition, and evidence-linked review claims.</p></header>
+<header><h1>{title}</h1><p>Deterministic KPI checks, statistical alerts, driver decomposition, and evidence-linked review claims.</p></header>
 <div class="notice"><strong>Human review required.</strong> Driver contributions are descriptive and anomaly alerts are signals, not causal diagnoses.</div>
 <div class="grid">{"".join(cards)}</div>
 <section><h2>Structured review claims</h2><div class="table-wrap"><table><thead><tr><th>ID</th><th>Type</th><th>Metric</th><th>Change</th><th>Status</th><th>Evidence</th></tr></thead><tbody>{"".join(claim_rows)}</tbody></table></div></section>
 <section><h2>Recent statistical alerts</h2><div class="table-wrap"><table><thead><tr><th>Week</th><th>Metric</th><th>Vs target</th><th>Score</th><th>Evidence</th></tr></thead><tbody>{alert_rows}</tbody></table></div></section>
-<footer>Fully synthetic portfolio artifact · no company data or production integration · analyst approval is outside this demo.</footer>
+<footer>{data_notice} · no autonomous action · analyst decisions are applied through the governed review command.</footer>
 </main></body></html>"""
     output_path.parent.mkdir(parents=True, exist_ok=True)
     output_path.write_text(content, encoding="utf-8")
