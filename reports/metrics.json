@@ -1,4 +1,9 @@
 {
+  "alert_summary": {
+    "alerts": 9,
+    "evaluation_status": "evaluated_on_injected_synthetic_labels",
+    "scored_metric_weeks": 208
+  },
   "artifact_fingerprint": "50a7efa058f05614",
   "data": {
     "checks_passed": 10,
@@ -8,8 +13,9 @@
     "start_week": "2024-01-01",
     "synthetic_anomalies": 7
   },
+  "data_mode": "synthetic_evaluation",
   "driver_reconciliation_max_abs_error": 2.0816681711721685e-16,
-  "evaluation_boundary": "Labeled synthetic data only",
+  "evaluation_boundary": "Labeled synthetic anomaly evaluation",
   "fixed_rule_baseline": {
     "f1": 0.8333333333333333,
     "false_alert_rate": 0.0,
@@ -19,6 +25,11 @@
     "recall": 0.7142857142857143,
     "true_negatives": 201,
     "true_positives": 5
+  },
+  "input_provenance": {
+    "generator": "business_review.synthetic.generate_weekly_kpis",
+    "periods": 64,
+    "seed": 42
   },
   "rolling_detector": {
     "f1": 0.8750000000000001,

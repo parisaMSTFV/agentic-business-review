@@ -12,3 +12,6 @@ The project demonstrates how to separate deterministic KPI calculations from rev
 - Why multiplicative NMV drivers are decomposed in log space.
 - Why every claim remains pending human review even when its values are traceable.
 - Why synthetic evaluation supports reproducibility but cannot estimate production performance or business impact.
+- Why supplied-input mode omits alert accuracy when no governed anomaly labels exist.
+- Why approvals are a separate validated file transition and never trigger downstream actions.
+- Why the repository's use of *agentic* means governed orchestration rather than an LLM or multi-agent claim.

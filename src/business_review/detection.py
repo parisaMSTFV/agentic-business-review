@@ -32,19 +32,19 @@ def detect_anomalies(
         safe_scale = scale.clip(lower=minimum_scale)
         score = (residual - center) / safe_scale
         valid = score.notna()
-        metric_result = pd.DataFrame(
-            {
-                "week_start": frame.loc[valid, "week_start"].to_numpy(),
-                "source_row_id": frame.loc[valid, "source_row_id"].to_numpy(),
-                "metric": metric,
-                "value": frame.loc[valid, metric].to_numpy(),
-                "target": frame.loc[valid, target_column].to_numpy(),
-                "target_residual": residual.loc[valid].to_numpy(),
-                "anomaly_score": score.loc[valid].to_numpy(),
-                "is_alert": score.loc[valid].abs().ge(threshold).astype(int).to_numpy(),
-                "injected_anomaly": frame.loc[valid, label_column].astype(int).to_numpy(),
-            }
-        )
+        values: dict[str, object] = {
+            "week_start": frame.loc[valid, "week_start"].to_numpy(),
+            "source_row_id": frame.loc[valid, "source_row_id"].to_numpy(),
+            "metric": metric,
+            "value": frame.loc[valid, metric].to_numpy(),
+            "target": frame.loc[valid, target_column].to_numpy(),
+            "target_residual": residual.loc[valid].to_numpy(),
+            "anomaly_score": score.loc[valid].to_numpy(),
+            "is_alert": score.loc[valid].abs().ge(threshold).astype(int).to_numpy(),
+        }
+        if label_column in frame:
+            values["injected_anomaly"] = frame.loc[valid, label_column].astype(int).to_numpy()
+        metric_result = pd.DataFrame(values)
         metric_result["evidence_id"] = (
             metric_result["source_row_id"] + ":" + metric_result["metric"]
         )
@@ -64,6 +64,8 @@ def baseline_alerts(alert_frame: pd.DataFrame, threshold: float = 0.12) -> pd.Da
 
 def evaluate_alerts(alert_frame: pd.DataFrame) -> dict[str, float | int]:
     """Calculate classification metrics from injected synthetic labels."""
+    if "injected_anomaly" not in alert_frame:
+        raise ValueError("Alert evaluation requires injected synthetic labels")
     actual = alert_frame["injected_anomaly"].astype(int)
     predicted = alert_frame["is_alert"].astype(int)
     tp = int(((actual == 1) & (predicted == 1)).sum())
