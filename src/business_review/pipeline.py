@@ -11,7 +11,7 @@ from typing import Any
 import pandas as pd
 
 from business_review.claims import build_claims, traceability_metrics
-from business_review.config import PROJECT_ROOT, load_metric_catalog
+from business_review.config import DEFAULT_OUTPUT_ROOT, load_metric_catalog
 from business_review.detection import baseline_alerts, detect_anomalies, evaluate_alerts
 from business_review.driver_analysis import decompose_latest_nmv_change
 from business_review.metrics import build_evidence_index, build_latest_snapshot
@@ -34,7 +34,7 @@ def _fingerprint(frames: list[pd.DataFrame]) -> str:
 
 
 def run_pipeline(
-    output_root: Path = PROJECT_ROOT,
+    output_root: Path = DEFAULT_OUTPUT_ROOT,
     seed: int = 42,
     periods: int = 64,
     input_path: Path | None = None,

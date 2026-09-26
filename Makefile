@@ -1,10 +1,13 @@
-.PHONY: install reproduce smoke supplied-smoke test lint security check
+.PHONY: install reproduce verify-evidence smoke supplied-smoke test lint security check
 
 install:
 	python -m pip install -e ".[dev]"
 
 reproduce:
-	MPLCONFIGDIR=.matplotlib python -m business_review.cli reproduce
+	MPLCONFIGDIR=.matplotlib python -m business_review.cli reproduce --output-root local-runs/latest
+
+verify-evidence:
+	MPLCONFIGDIR=.matplotlib python -m business_review.cli reproduce --output-root .
 
 smoke:
 	MPLCONFIGDIR=.matplotlib python -m business_review.cli smoke

@@ -52,6 +52,10 @@ def validate_weekly_kpis(
         raise DataValidationError("source_row_id must be populated")
     if frame["week_start"].isna().any():
         raise DataValidationError("week_start must contain valid dates")
+    if not frame["week_start"].dt.normalize().eq(frame["week_start"]).all():
+        raise DataValidationError("week_start must contain dates without time-of-day values")
+    if frame["source_row_id"].astype("string").str.startswith(("=", "+", "-", "@")).any():
+        raise DataValidationError("source_row_id contains a spreadsheet-formula prefix")
     if frame["source_row_id"].duplicated().any():
         raise DataValidationError("source_row_id must be unique")
     if frame["week_start"].duplicated().any():
@@ -61,7 +65,7 @@ def validate_weekly_kpis(
     if len(frame) < 14:
         raise DataValidationError("At least 14 weekly rows are required for rolling detection")
     gaps = frame["week_start"].diff().dropna()
-    if not gaps.eq(pd.Timedelta(days=7)).all():
+    if not gaps.eq(pd.to_timedelta(7, unit="D")).all():
         raise DataValidationError("week_start must use a complete seven-day cadence")
 
     numeric_columns = [
@@ -110,7 +114,7 @@ def load_weekly_kpis(
     try:
         content = path.read_bytes()
         frame = pd.read_csv(io.BytesIO(content), dtype={"source_row_id": "string"})
-    except (OSError, pd.errors.ParserError) as exc:
+    except (OSError, UnicodeError, pd.errors.ParserError) as exc:
         raise DataValidationError(f"Could not read supplied KPI input: {exc}") from exc
     if "week_start" in frame:
         frame["week_start"] = pd.to_datetime(frame["week_start"], errors="coerce")

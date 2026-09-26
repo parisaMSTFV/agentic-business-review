@@ -8,3 +8,4 @@ __pycache__/
 .matplotlib/
 dist/
 build/
+local-runs/

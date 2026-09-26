@@ -11,6 +11,15 @@ class ReviewDecisionError(ValueError):
     """Raised when a decision file cannot be applied safely."""
 
 
+def _reject_formula_prefixed_text(frame: pd.DataFrame, label: str) -> None:
+    text = frame.select_dtypes(include=["object", "string"]).astype("string")
+    for column in text:
+        if text[column].str.strip().str.startswith(("=", "+", "-", "@")).any():
+            raise ReviewDecisionError(
+                f"{label} column {column} contains a spreadsheet-formula prefix"
+            )
+
+
 def apply_review_decisions(
     claims_path: Path,
     decisions_path: Path,
@@ -19,6 +28,8 @@ def apply_review_decisions(
     """Apply explicit analyst decisions without triggering downstream actions."""
     claims = pd.read_csv(claims_path, dtype={"claim_id": "string"})
     decisions = pd.read_csv(decisions_path, dtype="string")
+    _reject_formula_prefixed_text(claims, "Claim")
+    _reject_formula_prefixed_text(decisions, "Decision")
     required = {"claim_id", "decision", "reviewer", "reviewed_at", "rationale"}
     claim_required = {"claim_id", "review_status"}
     claim_missing = sorted(claim_required.difference(claims.columns))
