@@ -64,3 +64,23 @@ def test_review_decisions_reject_unknown_claims(tmp_path: Path) -> None:
     ).to_csv(decisions, index=False)
     with pytest.raises(ReviewDecisionError, match="unknown claims"):
         apply_review_decisions(claims, decisions, tmp_path / "reviewed.csv")
+
+
+def test_review_decisions_reject_spreadsheet_formula_text(tmp_path: Path) -> None:
+    claims = tmp_path / "claims.csv"
+    decisions = tmp_path / "decisions.csv"
+    _write_claims(claims)
+    pd.DataFrame(
+        [
+            {
+                "claim_id": "C-1",
+                "decision": "approved",
+                "reviewer": '=HYPERLINK("bad")',
+                "reviewed_at": "2026-08-14T12:00:00Z",
+                "rationale": "Evidence checked",
+            }
+        ]
+    ).to_csv(decisions, index=False)
+
+    with pytest.raises(ReviewDecisionError, match="spreadsheet-formula prefix"):
+        apply_review_decisions(claims, decisions, tmp_path / "reviewed.csv")

@@ -4,11 +4,11 @@ from __future__ import annotations
 
 import json
 from dataclasses import dataclass
+from importlib.resources import files
 from pathlib import Path
 from typing import Literal
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-DEFAULT_CATALOG_PATH = PROJECT_ROOT / "configs" / "metric_catalog.json"
+DEFAULT_OUTPUT_ROOT = Path("local-runs/latest")
 
 
 @dataclass(frozen=True)
@@ -22,9 +22,10 @@ class MetricSpec:
     target_tolerance: float
 
 
-def load_metric_catalog(path: Path = DEFAULT_CATALOG_PATH) -> dict[str, MetricSpec]:
+def load_metric_catalog(path: Path | None = None) -> dict[str, MetricSpec]:
     """Load and validate metric display and direction metadata."""
-    raw = json.loads(path.read_text(encoding="utf-8"))
+    catalog_path = path or files("business_review").joinpath("resources", "metric_catalog.json")
+    raw = json.loads(catalog_path.read_text(encoding="utf-8"))
     catalog: dict[str, MetricSpec] = {}
     for name, values in raw.items():
         direction = values.get("direction")

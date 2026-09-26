@@ -187,7 +187,7 @@ Windows PowerShell activation:
 .venv\Scripts\Activate.ps1
 ```
 
-The reproduction command regenerates the synthetic data, metrics, CSV outputs, HTML review, and all PNG figures. `business-review smoke` runs the complete synthetic workflow in a temporary directory. `make supplied-smoke` exercises the supplied-input contract and the separate human-decision transition.
+The reproduction command writes synthetic data, metrics, CSV outputs, HTML review, and PNG figures under the ignored `local-runs/latest` directory. `make verify-evidence` intentionally regenerates the checked-in evidence when it needs review. `business-review smoke` runs the complete synthetic workflow in a temporary directory. `make supplied-smoke` exercises the supplied-input contract and the separate human-decision transition.
 
 ## Tests and quality checks
 

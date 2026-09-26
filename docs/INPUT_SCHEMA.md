@@ -6,8 +6,8 @@
 
 | Field | Type | Rule |
 |---|---|---|
-| `week_start` | date | Unique, ascending, complete seven-day cadence |
-| `source_row_id` | string | Populated and unique; becomes part of each evidence ID |
+| `week_start` | date | Unique, ascending, no time component, complete seven-day cadence |
+| `source_row_id` | string | Populated, unique, and not prefixed by `=`, `+`, `-`, or `@`; becomes part of each evidence ID |
 | `sessions`, `orders`, `conversion_rate`, `aov`, `nmv`, `service_failure_rate` | numeric | Finite and non-negative; rates are between zero and one |
 | `target_<metric>` | numeric | Finite and strictly positive for all six metrics |
 
@@ -21,4 +21,4 @@ Claims always start as `pending_human_review`. A separate `apply-decisions` comm
 
 ## Decision file
 
-The decision CSV requires `claim_id`, `decision`, `reviewer`, `reviewed_at`, and `rationale`. `decision` is either `approved` or `rejected`; timestamps must be ISO-8601. Partial review is allowed, unknown or duplicate claim IDs fail validation, and undecided claims remain pending.
+The decision CSV requires `claim_id`, `decision`, `reviewer`, `reviewed_at`, and `rationale`. `decision` is either `approved` or `rejected`; timestamps must be ISO-8601. Partial review is allowed, unknown or duplicate claim IDs fail validation, and undecided claims remain pending. Text beginning with spreadsheet-formula characters (`=`, `+`, `-`, or `@`) is rejected before a reviewed CSV is written.

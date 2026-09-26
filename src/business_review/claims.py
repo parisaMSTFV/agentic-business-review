@@ -27,7 +27,7 @@ def build_claims(
             }
         )
 
-    recent_cutoff = pd.Timestamp(alerts["week_start"].max()) - pd.Timedelta(weeks=7)
+    recent_cutoff = pd.Timestamp(alerts["week_start"].max()) - pd.to_timedelta(7, unit="W")
     recent_alerts = alerts[(alerts["week_start"] >= recent_cutoff) & (alerts["is_alert"] == 1)]
     for position, row in enumerate(recent_alerts.itertuples(index=False), start=1):
         records.append(

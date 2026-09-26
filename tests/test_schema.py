@@ -35,6 +35,20 @@ def test_schema_rejects_duplicate_source_ids() -> None:
         validate_weekly_kpis(frame, load_metric_catalog())
 
 
+def test_schema_rejects_spreadsheet_formula_source_id() -> None:
+    frame = generate_weekly_kpis()
+    frame.loc[0, "source_row_id"] = '=HYPERLINK("bad")'
+    with pytest.raises(DataValidationError, match="spreadsheet-formula prefix"):
+        validate_weekly_kpis(frame, load_metric_catalog())
+
+
+def test_schema_rejects_week_start_with_time_component() -> None:
+    frame = generate_weekly_kpis()
+    frame["week_start"] = frame["week_start"] + pd.to_timedelta(12, unit="h")
+    with pytest.raises(DataValidationError, match="without time-of-day"):
+        validate_weekly_kpis(frame, load_metric_catalog())
+
+
 def test_week_start_is_datetime_in_generated_data() -> None:
     assert pd.api.types.is_datetime64_any_dtype(generate_weekly_kpis()["week_start"])
 
@@ -52,7 +66,7 @@ def test_supplied_input_rejects_nonweekly_cadence(tmp_path: Path) -> None:
     frame = generate_weekly_kpis().drop(
         columns=[column for column in generate_weekly_kpis() if column.startswith("injected_")]
     )
-    frame.loc[3, "week_start"] = frame.loc[3, "week_start"] + pd.Timedelta(days=1)
+    frame.loc[3, "week_start"] = frame.loc[3, "week_start"] + pd.to_timedelta(1, unit="D")
     path = tmp_path / "invalid.csv"
     frame.to_csv(path, index=False)
     with pytest.raises(DataValidationError, match="seven-day cadence"):

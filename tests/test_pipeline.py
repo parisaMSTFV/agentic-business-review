@@ -3,6 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
+from business_review.cli import build_parser
 from business_review.pipeline import run_pipeline
 
 
@@ -21,6 +22,11 @@ def test_pipeline_writes_required_artifacts(tmp_path: Path) -> None:
     ]
     assert all((tmp_path / path).exists() for path in required)
     assert metrics["traceability"]["coverage"] == 1.0
+
+
+def test_reproduce_defaults_to_ignored_local_run_directory() -> None:
+    args = build_parser().parse_args(["reproduce"])
+    assert args.output_root == Path("local-runs/latest")
 
 
 def test_core_artifacts_are_deterministic(tmp_path: Path) -> None:

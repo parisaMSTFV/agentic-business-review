@@ -8,7 +8,7 @@ version = "1.0.0"
 description = "Governed weekly KPI review with evidence lineage and explicit human decisions."
 readme = "README.md"
 requires-python = ">=3.11"
-license = { file = "LICENSE" }
+license = "MIT"
 authors = [{ name = "Parisa Mostafavi" }]
 dependencies = [
   "matplotlib>=3.9",
@@ -27,6 +27,9 @@ business-review = "business_review.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.setuptools.package-data]
+business_review = ["resources/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
